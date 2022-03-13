@@ -1,9 +1,11 @@
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from application.db import people
+from application import salary
+from datetime import date
 
 
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    people.get_employees()
+    salary.calculate_salary()
+    print(date.today())
+
 
