@@ -1,5 +1,5 @@
-from application.db import people
-from application import salary
+from first_homework.application.db import people
+from first_homework.application import salary
 from datetime import date
 
 
