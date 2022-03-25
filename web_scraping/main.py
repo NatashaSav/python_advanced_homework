@@ -2,26 +2,47 @@ import requests
 import bs4
 
 HEADERS = {
-'Cookie': '_ym_uid=1609341547512822598; _ga=GA1.2.669337776.1609341548; hl=ru; fl=ru; _ym_d=1640877494; feature_streaming_comments=true; __gads=ID=ce239cf2d7a1ffa1:T=1645133340:S=ALNI_MYQ9qMU-QwW_ySNE4FHeYRDraZlFg; visited_articles=456214:247373:531472:541256:193136:556942:483400:241223:196382:480022; habr_web_home_feed=/all/; _ym_isad=2; _gid=GA1.2.2027820782.1647891589; cto_bundle=yKnYbF8xWEk2R0hKQXNQRmZadXRzNmpkR1hVZGRQYlNNaG1HZ2RWRmJsWE9UYjJSbGNqWWNnZ0xNWDg4bjNDT1RHZnR5cXRPaDIwYlNEYmQwbUl2RVNMamhEM3V3dmVuNDBnayUyQjlaSlNkTWFVU0d0cXp6bkd2N1dEZWRFRVdmTmRNWDJs',
-'Accept-Language': 'en-US,en;q=0.9,ru;q=0.8',
-'Sec-Fetch-Dest': 'document',
-'Sec-Fetch-Site': 'same-origin',
-'Sec-Fetch-User': '?1',
-'Cache-Control': 'no-cache',
-'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Mobile Safari/537.36',
-'sec-ch-ua-mobile': '?1'
-}
+    'Cookie': '_ym_uid=1639148487334283574; _ym_d=1639149414; _ga=GA1.2.528119004.1639149415; _gid=GA1.2.512914915.1639149415; habr_web_home=ARTICLES_LIST_ALL; hl=ru; fl=ru; _ym_isad=2; __gads=ID=87f529752d2e0de1-221b467103cd00b7:T=1639149409:S=ALNI_MYKvHcaV4SWfZmCb3_wXDx2olu6kw',
+    'Accept-Language': 'ru-RU,ru;q=0.9',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-User': '?1',
+    'Cache-Control': 'max-age=0',
+    'If-None-Match': 'W/"37433-+qZyNZhUgblOQJvD5vdmtE4BN6w"',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36',
+    'sec-ch-ua-mobile': '?0'}
 
-url = "https://habr.com/ru/all/"
+url = "https://habr.com/ru/all"
+base_url = "https://habr.com"
 
-HUBS = ['Машинное обучение', 'Data Engineering', 'Химия', 'программирование', 'программирования', 'GitHub']
+KEYWORDS = ['Программирование', 'программирования', 'Машинное обучение', 'Системное администрирование', 'Python',
+            'Здоровье', 'DevOps', 'Docker']
 
 response = requests.get(url, headers=HEADERS)
 response.raise_for_status()
 text = response.text
 
 soup = bs4.BeautifulSoup(text, features='html.parser')
-article = soup.find(class_="tm-article-snippet")
-one_text = soup.select('.tm-article-body .article-formatted-body')
-print(one_text)
-print('')
+articles = soup.find_all(class_="tm-articles-list__item")
+list_found_articles = list()
+updated_info = ''
+for item in articles:
+    inner_text = item.text
+    date_published = item.find(class_="tm-article-snippet__datetime-published").text
+    title_for_article = item.find(class_="tm-article-snippet__title-link").text
+    article_link = base_url + item.find(class_="tm-article-snippet__title-link").attrs['href']
+    uniq_value = set(inner_text.split())
+    for keyword in KEYWORDS:
+        if keyword in uniq_value:
+            full_info_about_articles = "{}, {}, {}".format(date_published, title_for_article, article_link)
+            list_found_articles.append(full_info_about_articles)
+            for item in list_found_articles:
+                updated_info = '\n'.join(list_found_articles)
+        else:
+            continue
+print(updated_info)
+if not updated_info:
+  print("Статьи по данным ключевым словам не найдены")
+
+
