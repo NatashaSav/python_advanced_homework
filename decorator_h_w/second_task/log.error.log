@@ -1,0 +1,8 @@
+2022-05-02 18:49:33,374 wrapper():ERROR: Error has occurred
+Traceback (most recent call last):
+  File "/Users/dmitro/Documents/Courses/python_advanced_homework/decorator_h_w/second_task/log.py", line 28, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/dmitro/Documents/Courses/python_advanced_homework/decorator_h_w/second_task/decorator_paths_to_logs.py", line 5, in divide
+    return num1 / num2
+ZeroDivisionError: division by zero
+2022-05-02 18:49:33,375 wrapper():INFO: Все аргументы  10 0
