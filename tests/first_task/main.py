@@ -64,6 +64,7 @@ def add_new_shelf(shelf_number=''):
 def append_doc_to_shelf(doc_number, shelf_number):
     add_new_shelf(shelf_number)
     directories[shelf_number].append(doc_number)
+    return shelf_number
 
 
 def delete_doc():

@@ -1,14 +1,8 @@
-import sys
 import unittest
-from unittest import mock
-
-import tests
-from pycparser.plyparser import parameterized
-from zope.interface import document
 
 from main import check_document_existance, get_doc_owner_name, add_new_shelf, remove_doc_from_shelf, add_new_doc, \
-    delete_doc, get_input, show_all_docs_info, show_document_info
-from unittest.mock import MagicMock, patch
+    delete_doc, show_all_docs_info, append_doc_to_shelf, documents
+from unittest.mock import patch
 
 
 
@@ -20,18 +14,18 @@ class Test_Accounting(unittest.TestCase):
 
     @patch('main.get_input', return_value='10006')
     def test_get_owner_name(self, input):
-        get_name = get_doc_owner_name()
-        self.assertTrue(type(get_name), "str")
+        actual_name = get_doc_owner_name()
+        expected_name = 'Аристарх Павлов'
+        self.assertEqual(actual_name, expected_name)
 
     def test_add_new_shelf(self):
-        new_shelf = add_new_shelf('4')
-        self.assertTrue(new_shelf)
+         append_doc_to_shelf('345', '4')
+         self.assertIn('4', add_new_shelf('4'))
 
     def test_remove_doc_from_shelf(self):
-        shelf = remove_doc_from_shelf(4)
-        show_all_docs_info()
-        if not shelf:
-            self.assertIsNone(shelf)
+        self.test_add_new_shelf()
+        shelf = remove_doc_from_shelf('345')
+        self.assertNotIn('4', documents)
 
 
     @patch('main.input', create=True)
@@ -39,8 +33,16 @@ class Test_Accounting(unittest.TestCase):
         mock_input.side_effect = ['12345', 'test_type', 'Иван Тарасов', 4]
         add_new_doc()
         self.assertIn({'type': 'test_type', 'number': '12345', 'name': 'Иван Тарасов'}, show_all_docs_info())
-        # self.assertIn('test_type', show_all_docs_info())
-        # self.assertIn('Иван Тарасов', show_all_docs_info())
+
+    @patch('main.input', create=True)
+    def test_delete_doc(self, mock_input):
+        mock_input.side_effect = ['12345']
+        delete_doc()
+        self.assertNotIn({'type': 'test_type', 'number': '12345', 'name': 'Иван Тарасов'}, show_all_docs_info())
+
+
+
+
 
 
 
