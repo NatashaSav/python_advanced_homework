@@ -32,7 +32,7 @@ class TestYandexDisk(unittest.TestCase):
         response = self.yandex_service.get("disk/resources", {"path": "test_folder"}).status_code
         self.assertEqual(response, 404)
 
-    test
+    def test(self):
 
 
 
