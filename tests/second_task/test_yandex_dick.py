@@ -33,6 +33,7 @@ class TestYandexDisk(unittest.TestCase):
         self.assertEqual(response, 404)
 
     def test(self):
+        return pass
 
 
 
